@@ -2,8 +2,8 @@
 
 In this task I implemented a console application,
 that allows you to apply various filters to images,
-similar to filters in popular graphic editors.      
-
+similar to filters in popular graphic editors.  
+<br>
 
 ## Supported image format
 
@@ -43,22 +43,23 @@ The filter list can be empty, then the image must be saved as is.
 Filters are applied in the order in which they are listed in the command line arguments.    
 
 
-## Фильтры
+## Filters
 
-В формулах далее считаем, что каждая компонента цвета
-представлена вещественным числом от 0 до 1. Цвета пикселей
-представлены тройками `(R, G, B)`. Таким образом, `(0, 0, 0)` – черный,
-`(1, 1, 1)` – белый.
+In the formulas below, we assume that each component of color
+is represented by a real number from 0 to 1. Pixel colors
+are represented by the triples `(R, G, B)`. Thus, `(0, 0, 0, 0)` is black,
+`(1, 1, 1, 1)` is white.
 
-Если фильтр задан матрицей, это означает, что значение каждого из цветов определяется взвешенной суммой
-значений этого цвета в соседних пикселях в соответствии с матрицей. При этом целевому пикселю
-соответствует центральный элемент матрицы.
+If the filter is given by a matrix, this means that the value of each color is determined by the weighted sum of the
+values of this color in neighboring pixels according to the matrix. In this case, the target pixel
+corresponds to the center element of the matrix.
 
-Например, для фильтра, заданного матрицей
+For example, for the filter defined by the matrix
 
 ![encoding](https://latex.codecogs.com/svg.image?%5Cbegin%7Bbmatrix%7D1%20&%202%20&%203%20%5C%5C4%20&%205%20&%206%20%5C%5C7%20&%208%20&%209%20%5C%5C%5Cend%7Bbmatrix%7D)
 
-Значение каждого из цветов целевого пикселя `C[x][y]` будет определяться формулой
+The value of each of the colors of the target pixel `C[x][y]` will be determined by the formula
+
 
 ```
 C[x][y] =
@@ -69,46 +70,51 @@ C[x][y] =
 ))
 ```
 
-При обработке пикселей, близких к краю изображения, часть матрицы может выходить за границу изображения.
-В таком случае в качестве значения пикселя, выходящего за границу, следует использовать значение ближайшего
-к нему пикселя изображения.
+When processing pixels close to the edge of the image, part of the matrix may extend beyond the image boundary.
+In such a case, the value of the nearest image pixel should be used as the value of the pixel that is outside the boundary.
+pixel value should be used as the value of the nearest pixel in the image.
 
-### Список базовых фильтров
+### List of basic filters
 
 #### Crop (-crop width height)
-Обрезает изображение до заданных ширины и высоты. Используется верхняя левая часть изображения.
+Crop the image to the specified width and height. The upper left portion of the image is used.
 
-Если запрошенные ширина или высота превышают размеры исходного изображения, выдается доступная часть изображения.
+If the requested width or height exceeds the dimensions of the original image, the available portion of the image is output.  
+<br>
 
 #### Grayscale (-gs)
-Преобразует изображение в оттенки серого по формуле
+Converts the image to grayscale using the formula
 
-![encoding](https://latex.codecogs.com/svg.image?R'%20=%20G'%20=%20B'%20=0.299%20R%20&plus;%200%20.587%20G%20&plus;%200%20.%20114%20B)
+![encoding](https://latex.codecogs.com/svg.image?R'%20=%20G'%20=%20B'%20=0.299%20R%20&plus;%200%20.587%20G%20&plus;%200%20.%20114%20B)  
+<br>
 
 #### Negative (-neg)
-Преобразует изображение в негатив по формуле
+Converts the image to negative using the formula
 
-![encoding](https://latex.codecogs.com/svg.image?R'%20=%201%20-%20R,%20G'%20=%201%20-%20G,%20B'%20=%201%20-%20B)
+![encoding](https://latex.codecogs.com/svg.image?R'%20=%201%20-%20R,%20G'%20=%201%20-%20G,%20B'%20=%201%20-%20B)  
+<br>
 
 #### Sharpening (-sharp)
-Повышение резкости. Достигается применением матрицы
+Sharpening. Achieved by applying a matrix
 
-![encoding](https://latex.codecogs.com/svg.image?%5Cbegin%7Bbmatrix%7D%20&%20-1%20&%20%20%5C%5C-1%20&%205%20&%20-1%20%5C%5C%20&%20-1%20&%20%20%5C%5C%5Cend%7Bbmatrix%7D)
+![encoding](https://latex.codecogs.com/svg.image?%5Cbegin%7Bbmatrix%7D%20&%20-1%20&%20%20%5C%5C-1%20&%205%20&%20-1%20%5C%5C%20&%20-1%20&%20%20%5C%5C%5Cend%7Bbmatrix%7D)  
+<br>
 
 #### Edge Detection (-edge threshold)
-Выделение границ. Изображение переводится в оттенки серого и применяется матрица
+Edge detection. The image is converted to grayscale and matrix is applied
 
 ![encoding](https://latex.codecogs.com/svg.image?%5Cbegin%7Bbmatrix%7D%20&%20-1%20&%20%20%5C%5C-1%20&%204%20&%20-1%20%5C%5C%20&%20-1%20&%20%20%5C%5C%5Cend%7Bbmatrix%7D)
 
-Пиксели со значением, превысившим `threshold`, окрашиваются в белый, остальные – в черный.
+Pixels with value exceeding `threshold` are colored white, the rest - black.  
+<br>
 
 #### Gaussian Blur (-blur sigma)
-[Гауссово размытие](https://ru.wikipedia.org/wiki/Размытие_по_Гауссу),
-параметр – сигма.
+[Gaussian Blur](https://en.wikipedia.org/wiki/Gaussian_blur),
+the parameter is sigma.
 
-Значение каждого из цветов пикселя `C[x0][y0]` определяется формулой
+The value of each of the pixel colors `C[x0][y0]` is determined by the formula
 
 ![encoding](https://latex.codecogs.com/svg.image?C%5Bx_0%5D%5By_0%5D%20%3D%20%5Csum_%7Bx%3D0%2Cy%3D0%7D%5E%7Bwidth-1%2C%20height-1%7DC%5Bx%5D%5By%5D%5Cfrac%7B1%7D%7B2%5Cpi%5Csigma%5E2%7De%5E%7B-%5Cfrac%7B%5Cleft%7Cx_o-x%5Cright%7C%5E2%20%26plus%3B%20%5Cleft%7Cy_o-y%5Cright%7C%5E2%7D%7B2%5Csigma%5E2%7D%7D)
 
-Существуют различные варианты релализации и оптимизации вычисления этого фильтра, описание есть [в Википедии](https://ru.wikipedia.org/wiki/Размытие_по_Гауссу).
+There are different variants of relalization and optimization of this filter calculation, there is a description [in Wikipedia](https://en.wikipedia.org/wiki/Gaussian_blur).
 
