@@ -1,44 +1,47 @@
-# Графические фильтры (image_processor)
+# Graphic filters (image_processor)
 
-В этом задании требуется реализовать консольное приложение,
-позволяющее применять к изображениям различные фильтры,
-аналогичные фильтрам в популярных графических редакторах.
+In this task I implemented a console application,
+that allows you to apply various filters to images,
+similar to filters in popular graphic editors.      
 
-## Поддерживаемый формат изображений
 
-Входные и выходные графические файлы должны быть в формате [BMP](http://en.wikipedia.org/wiki/BMP_file_format).
+## Supported image format
 
-Формат BMP поддерживает достаточно много вариаций, но в этом задании будет использоваться
-24-битный BMP без сжатия и без таблицы цветов. Тип используемого `DIB header` - `BITMAPINFOHEADER`.
+Input and output graphic files should be in [BMP](http://en.wikipedia.org/wiki/BMP_file_format) format.
 
-Пример файла в нужном формате есть в статье на Википедии [в разделе "Example 1"](https://en.wikipedia.org/wiki/BMP_file_format#Example_1)
-и в папке [test_script/data](test_script/data).
+BMP format supports quite a few variations, but in this task we will use
+24-bit BMP with no compression and no color table. The type of `DIB header` used is `BITMAPINFOHEADER`.
 
-При тестировании обязательно обращайте внимание на то, чтобы тестовое изображение
-было сохранено именно в 24-битном BMP.
+There is an example of a file in the required format in the Wikipedia article [under "Example 1"](https://en.wikipedia.org/wiki/BMP_file_format#Example_1).
+and in the [test_script/data](test_script/data) folder.
 
-## Формат аргументов командной строки
+When testing, make sure that the test image
+should be saved in 24-bit BMP.
 
-Описание формата аргументов командной строки:
 
-`{имя программы} {путь к входному файлу} {путь к выходному файлу}
-[-{имя фильтра 1} [параметр фильтра 1] [параметр фильтра 2] ...]
-[-{имя фильтра 2} [параметр фильтра 1] [параметр фильтра 2] ...] ...`
+## Command line argument format
 
-При запуске без аргументов программа выводит справку.
+Command line argument format description:
 
-### Пример
+`{program name} {path to input file} {path to output file}
+[-{filter name 1} [filter parameter 1] [filter parameter 2] ...]
+[-{filter name 2} [filter parameter 1] [filter parameter 2] ...] ...] ...`
+
+When run without arguments, the program displays help.
+
+### Example
 `./image_processor input.bmp /tmp/output.bmp -crop 800 600 -gs -blur 0.5`
 
-В этом примере
-1. Загружается изображение из файла `input.bmp`
-2. Обрезается до изображения с началом в верхнем левом углу и размером 800х600 пикселей
-3. Переводится в оттенки серого
-4. Применяется размытие с сигмой 0.5
-5. Полученное изображение сохраняется в файл `/tmp/output.bmp`
+In this example.
+1. Loads the image from the `input.bmp` file
+2. it is cropped to an image with the start in the upper left corner and size 800x600 pixels
+3. Converted to grayscale
+4. Blur with sigma 0.5 is applied
+5. The resulting image is saved to the `/tmp/output.bmp` file
 
-Список фильтров может быть пуст, тогда изображение должно быть сохранено в неизменном виде.
-Фильтры применяются в том порядке, в котором они перечислены в аргументах командной строки.
+The filter list can be empty, then the image must be saved as is.
+Filters are applied in the order in which they are listed in the command line arguments.    
+
 
 ## Фильтры
 
