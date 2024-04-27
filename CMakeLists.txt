@@ -1,3 +1,4 @@
+set(CMAKE_CXX_STANDARD 14)
 add_executable(
     image_processor
     image_processor.cpp
